@@ -1,4 +1,4 @@
-import sequelize from "../index.js";
+import sequelize from "../index.js"; 
 import s from "sequelize";
 const { DataTypes } = s;
 
@@ -9,11 +9,15 @@ const Product = sequelize.define("product", {
     autoIncrement: true,
   },
   name: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   category: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  brand: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
   description: {
@@ -26,7 +30,7 @@ const Product = sequelize.define("product", {
   },
   price: {
     type: DataTypes.FLOAT,
-    allowNull: true,
-  }
+    allowNull: false,
+  },
 })
 export default Product;
