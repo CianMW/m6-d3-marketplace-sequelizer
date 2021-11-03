@@ -43,6 +43,19 @@ productsRouter
       }
     });
     res.send(updatedProduct)
+  })
+  .delete(async (req, res, next) => {
+    try{
+    const productDeletion = await Product.destroy({
+      where: {
+        id:req.params.id
+      }
+    });
+    res.send({productDeletion})
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
   });
 
 export default productsRouter;
