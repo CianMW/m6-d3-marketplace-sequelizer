@@ -9,11 +9,11 @@ const Product = sequelize.define("product", {
     autoIncrement: true,
   },
   name: {
-    type: DataTypes.VARCHAR(50),
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   category: {
-    type: DataTypes.VARCHAR(50),
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   description: {
