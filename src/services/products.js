@@ -35,6 +35,14 @@ productsRouter
       }
     });
     res.send(specificProduct)
+  })
+  .put(async (req, res, next) => {
+    const updatedProduct = await Product.update({ ...req.body}, {
+      where: {
+        id:`${req.params.id}`
+      }
+    });
+    res.send(updatedProduct)
   });
 
 export default productsRouter;
