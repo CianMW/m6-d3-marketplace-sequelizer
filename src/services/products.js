@@ -8,7 +8,7 @@ productsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const products = await Product.findAll({ include: Review });
+      const products = await Product.findAll({ include: Review, order:[['id','ASC']]  });
       res.send(products);
     } catch (error) {
       console.log(error);
