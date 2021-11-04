@@ -25,9 +25,9 @@ const cloudinaryStorage = new CloudinaryStorage({
 productsRouter
   .route("/")
   .get(async (req, res, next) => {
-    console.log("this is the cloudinary api" , process.env)
     try {
-      const products = await Product.findAll({ order:[['id','ASC']] });
+      const products = await Product.findAll({ order:[['id','ASC']],
+      include: [{ model: Category, through: { attributes: [] }}]});
       res.send(products);
     } catch (error) {
       console.log(error);
