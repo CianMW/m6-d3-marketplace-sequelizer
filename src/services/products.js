@@ -27,7 +27,9 @@ productsRouter
   .get(async (req, res, next) => {
     try {
       const products = await Product.findAll({ order:[['id','ASC']],
-      include: [{ model: Category, through: { attributes: [] }}]});
+      include: [{ model: Category, through: { attributes: [] }}, {model: Review}]
+    
+    });
       res.send(products);
     } catch (error) {
       console.log(error);

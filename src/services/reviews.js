@@ -15,22 +15,7 @@ reviewsRouter
       next(error);
     }
   })
-  .post(async (req, res, next) => {
-    console.log("THIS IS THE REQUEST BODY", req.body)
-    try {
-      console.log("THIS IS THE REQUEST BODY", req.body)
-    //   const addProductKey = await Review.update({ productId:req.params.id }, {
-    //     where: {
-    //       id:`${req.params.id}`
-    //     }
-    //   })
-      const newReview = await Review.create({...req.body});
-      res.send(newReview);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  });
+
   reviewsRouter
   .route("/:id")
   .get(async (req, res, next) => {
@@ -61,6 +46,19 @@ reviewsRouter
     console.log(error);
     next(error);
   }
+  });
+
+  reviewsRouter
+  .route("/")
+  .post(async (req, res, next) => {
+    console.log("THIS IS THE REQUEST BODY", req.body)
+    try {
+      const newReview = await Review.create({...req.body});
+      res.send(newReview);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   });
 
 export default reviewsRouter;
