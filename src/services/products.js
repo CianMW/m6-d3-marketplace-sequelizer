@@ -1,12 +1,31 @@
 import express from "express";
 import models from "../db/models/index.js"
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import dotenv from 'dotenv/config';
 const { Product, Review } = models;
 
 const productsRouter = express.Router();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+})
+
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "products",
+  },
+});
+
+
 productsRouter
   .route("/")
   .get(async (req, res, next) => {
+    console.log("this is the cloudinary api" , process.env)
     try {
       const products = await Product.findAll({ include: Review, order:[['id','ASC']]  });
       res.send(products);
@@ -57,5 +76,24 @@ productsRouter
     next(error);
   }
   });
+
+  productsRouter
+  .route("/:id/upload")
+  .put(multer({ storage: cloudinaryStorage }).single("image"),
+  async (req, res, next) => {
+    console.log("this is the cloudinary api" , process.env.CLOUDINARY_URL)
+    if(req.file) {
+      const addFileUrl = await Product.update({ image: req.file.path }, {
+        where: {
+          id:req.params.id
+        }
+      });
+      res.send(addFileUrl)
+    } else {
+
+      console.log(error)
+      next(error)
+    }
+  })
 
 export default productsRouter;
