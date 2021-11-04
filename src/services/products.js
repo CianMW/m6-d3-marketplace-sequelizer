@@ -4,7 +4,7 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from 'dotenv/config';
-const { Product, Review, User, Category } = models;
+const { Product, Review, User, Category, ProductJoinCategory } = models;
 
 const productsRouter = express.Router();
 
@@ -27,7 +27,7 @@ productsRouter
   .get(async (req, res, next) => {
     console.log("this is the cloudinary api" , process.env)
     try {
-      const products = await Product.findAll({ include: Review, order:[['id','ASC']]  });
+      const products = await Product.findAll({ order:[['id','ASC']] });
       res.send(products);
     } catch (error) {
       console.log(error);
@@ -93,6 +93,24 @@ productsRouter
 
       console.log(error)
       next(error)
+    }
+  })
+
+
+  productsRouter
+  .route("/:categoryID/post")
+  .post(async (req, res, next) => {
+    try {
+
+    // gets the specific category by id
+
+      const newproduct = await Product.create(req.body);
+      
+      const joinNewProduct = ProductJoinCategory.create({productId: newproduct.id, categoryId: req.params.categoryID})
+      res.send(joinNewProduct);
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   })
 

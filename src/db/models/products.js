@@ -12,10 +12,6 @@ const Product = sequelize.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   brand: {
     type: DataTypes.STRING,
     allowNull: false,

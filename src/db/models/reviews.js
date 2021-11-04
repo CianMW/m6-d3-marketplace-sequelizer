@@ -12,11 +12,6 @@ const Review = sequelize.define("review", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  username: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-
 });
 
 export default Review;

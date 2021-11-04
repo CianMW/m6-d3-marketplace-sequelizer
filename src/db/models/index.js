@@ -25,4 +25,4 @@ Review.belongsTo(User, { onDelete: "CASCADE" }); // creates ReviewID as foreign 
 
 
 
-export default { Product, Review, Category, User };
+export default { Product, Review, Category, User, ProductJoinCategory };
