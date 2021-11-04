@@ -6,6 +6,7 @@ import {join} from "path"
 import dotenv from 'dotenv/config';
 import listEndpoints from "express-list-endpoints";
 import reviewsRouter from "./services/reviews.js";
+import categoryRouter from "./services/category.js";
 
 
 const server = express();
@@ -22,6 +23,8 @@ server.use(express.static(publicFolderPath));
 server.use(express.json());
 server.use("/products", productsRouter);
 server.use("/reviews", reviewsRouter);
+server.use("/category", categoryRouter);
+
 
 console.table(listEndpoints(server))
 

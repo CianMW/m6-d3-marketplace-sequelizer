@@ -1,7 +1,7 @@
 import Product from "./products.js";
 import Review from "./reviews.js";
 import User from "./user.js"
-import Category from "./category"
+import Category from "./category.js"
 import ProductJoinCategory from "./productCategory.js"
 
 
@@ -25,4 +25,4 @@ Review.belongsTo(User, { onDelete: "CASCADE" }); // creates ReviewID as foreign 
 
 
 
-export default { Product, Review, Category };
+export default { Product, Review, Category, User };

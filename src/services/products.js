@@ -4,7 +4,7 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from 'dotenv/config';
-const { Product, Review } = models;
+const { Product, Review, User, Category } = models;
 
 const productsRouter = express.Router();
 
