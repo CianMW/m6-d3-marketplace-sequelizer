@@ -3,6 +3,7 @@ import Review from "./reviews.js";
 import User from "./user.js"
 import Category from "./category.js"
 import ProductJoinCategory from "./productCategory.js"
+import ShoppingCart from "./shoppingCart.js"
 
 
 //hasMany => 
@@ -24,5 +25,9 @@ User.hasMany(Review, { onDelete: "CASCADE" }); // creates ProductID as foreign k
 Review.belongsTo(User, { onDelete: "CASCADE" }); // creates ReviewID as foreign key in Reviews
 
 
+User.belongsToMany(Product, {through : {model: ShoppingCart, unique: false}} );
+Product.belongsToMany(User, {through : {model: ShoppingCart, unique: false}} );
 
-export default { Product, Review, Category, User, ProductJoinCategory };
+
+
+export default { Product, Review, Category, User, ProductJoinCategory , ShoppingCart };

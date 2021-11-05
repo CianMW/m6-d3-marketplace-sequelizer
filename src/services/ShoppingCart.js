@@ -4,30 +4,16 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from 'dotenv/config';
-const { Product, Review, User, Category, ProductJoinCategory } = models;
+const { Product, Review, User, Category, ProductJoinCategory, ShoppingCart } = models;
 
-const productsRouter = express.Router();
+const ShoppingRouter = express.Router();
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET 
-})
-
-const cloudinaryStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "products",
-  },
-});
-
-
-productsRouter
+ShoppingRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const products = await Product.findAll({ order:[['id','ASC']],
-      include: [{ model: Category, through: { attributes: [] }}, {model: Review , include: [{ model: User }] }  ]
+      const products = await ShoppingCart.findAll({ order:[['id','ASC']],
+      include: [{ model: Product, through: { attributes: [] }}  ]
     
     });
       res.send(products);
@@ -47,7 +33,7 @@ productsRouter
       next(error);
     }
   });
-  productsRouter
+  ShoppingRouter
   .route("/:id")
   .get(async (req, res, next) => {
     const specificProduct = await Product.findAll({
@@ -79,7 +65,7 @@ productsRouter
   }
   });
 
-  productsRouter
+  ShoppingRouter
   .route("/:id/upload")
   .put(multer({ storage: cloudinaryStorage }).single("image"),
   async (req, res, next) => {
@@ -99,7 +85,7 @@ productsRouter
   })
 
 
-  productsRouter
+  ShoppingRouter
   .route("/:categoryID/post")
   .post(async (req, res, next) => {
     try {
@@ -116,4 +102,4 @@ productsRouter
     }
   })
 
-export default productsRouter;
+export default ShoppingRouter;

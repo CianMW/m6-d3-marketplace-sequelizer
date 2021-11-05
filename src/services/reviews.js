@@ -48,12 +48,13 @@ reviewsRouter
   }
   });
 
+
+  
   reviewsRouter
   .route("/")
   .post(async (req, res, next) => {
-    console.log("THIS IS THE REQUEST BODY", req.body)
     try {
-      const newReview = await Review.create({...req.body});
+      const newReview = await Review.create(req.body);
       res.send(newReview);
     } catch (error) {
       console.log(error);
