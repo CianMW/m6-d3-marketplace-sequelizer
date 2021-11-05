@@ -8,6 +8,7 @@ import listEndpoints from "express-list-endpoints";
 import reviewsRouter from "./services/reviews.js";
 import categoryRouter from "./services/category.js";
 import usersRouter from "./services/users.js";
+import ShoppingRouter from "./services/ShoppingCart.js";
 
 
 const server = express();
@@ -26,6 +27,7 @@ server.use("/products", productsRouter);
 server.use("/reviews", reviewsRouter);
 server.use("/category", categoryRouter);
 server.use("/users", usersRouter);
+server.use("/shopping", ShoppingRouter);
 
 
 console.table(listEndpoints(server))

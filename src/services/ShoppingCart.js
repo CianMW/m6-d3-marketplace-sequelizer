@@ -9,25 +9,26 @@ const { Product, Review, User, Category, ProductJoinCategory, ShoppingCart } = m
 const ShoppingRouter = express.Router();
 
 ShoppingRouter
-  .route("/")
+  .route("/:id")
   .get(async (req, res, next) => {
     try {
-      const products = await ShoppingCart.findAll({ order:[['id','ASC']],
-      include: [{ model: Product, through: { attributes: [] }}  ]
-    
-    });
-      res.send(products);
+     
+      const cart = await User.findAll({ order:[['id','ASC']],
+      where : {id : 1}, include : [{ model:Product, through: { model: ShoppingCart } }]
+      });
+
+      res.send(cart)
     } catch (error) {
       console.log(error);
       next(error);
     }
   })
   .post(async (req, res, next) => {
+      //need to include userId and productId in the req.body
     console.log("THIS IS THE REQUEST BODY", req.body)
     try {
-      console.log("THIS IS THE REQUEST BODY", req.body)
-      const newProduct = await Product.create(req.body);
-      res.send(newProduct);
+      const addToCart = await ShoppingCart.create(req.body);
+      res.send(addToCart);
     } catch (error) {
       console.log(error);
       next(error);
@@ -36,70 +37,26 @@ ShoppingRouter
   ShoppingRouter
   .route("/:id")
   .get(async (req, res, next) => {
-    const specificProduct = await Product.findAll({
+    const specificProduct = await ShoppingCart.findAll({
       where: {
         id:`${req.params.id}`
       }
     });
     res.send(specificProduct)
   })
-  .put(async (req, res, next) => {
-    const updatedProduct = await Product.update({ ...req.body}, {
-      where: {
-        id:`${req.params.id}`
-      }
-    });
-    res.send(updatedProduct)
-  })
   .delete(async (req, res, next) => {
     try{
-    const productDeletion = await Product.destroy({
+    const productRemoveFromCart = await ShoppingCart.destroy({
       where: {
         id:req.params.id
       }
     });
-    res.send({productDeletion})
+    res.send({productRemoveFromCart})
   } catch (error) {
     console.log(error);
     next(error);
   }
   });
 
-  ShoppingRouter
-  .route("/:id/upload")
-  .put(multer({ storage: cloudinaryStorage }).single("image"),
-  async (req, res, next) => {
-    console.log("this is the cloudinary api" , process.env.CLOUDINARY_URL)
-    if(req.file) {
-      const addFileUrl = await Product.update({ image: req.file.path }, {
-        where: {
-          id:req.params.id
-        }
-      });
-      res.send(addFileUrl)
-    } else {
-
-      console.log(error)
-      next(error)
-    }
-  })
-
-
-  ShoppingRouter
-  .route("/:categoryID/post")
-  .post(async (req, res, next) => {
-    try {
-
-    // gets the specific category by id
-
-      const newproduct = await Product.create(req.body);
-      
-      const joinNewProduct = ProductJoinCategory.create({productId: newproduct.id, categoryId: req.params.categoryID})
-      res.send(joinNewProduct);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  })
 
 export default ShoppingRouter;
