@@ -20,6 +20,7 @@ Category.belongsToMany(Product, {through : {model: ProductJoinCategory, unique: 
             // unique: false is used to remove the primary key automatically made by using "through"
 
 
+
 // For USER TO REVIEW
 User.hasMany(Review, { onDelete: "CASCADE" }); // creates ProductID as foreign key in Reviews
 Review.belongsTo(User, { onDelete: "CASCADE" }); // creates ReviewID as foreign key in Reviews
@@ -27,6 +28,12 @@ Review.belongsTo(User, { onDelete: "CASCADE" }); // creates ReviewID as foreign 
 
 User.belongsToMany(Product, {through : {model: ShoppingCart, unique: false}} );
 Product.belongsToMany(User, {through : {model: ShoppingCart, unique: false}} );
+
+ShoppingCart.belongsTo(User);
+ShoppingCart.belongsTo(Product);
+User.hasMany(ShoppingCart);
+Product.hasMany(ShoppingCart);
+
 
 
 

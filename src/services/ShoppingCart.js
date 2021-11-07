@@ -14,7 +14,7 @@ ShoppingRouter
     try {
      
       const cart = await User.findAll({ order:[['id','ASC']],
-      where : {id : 1}, include : [{ model:Product, through: { model: ShoppingCart } }]
+      where : {id : req.params.id}, include : [{ model:Product, through: { model: ShoppingCart } }]
       });
 
       res.send(cart)
@@ -23,17 +23,7 @@ ShoppingRouter
       next(error);
     }
   })
-  .post(async (req, res, next) => {
-      //need to include userId and productId in the req.body
-    console.log("THIS IS THE REQUEST BODY", req.body)
-    try {
-      const addToCart = await ShoppingCart.create(req.body);
-      res.send(addToCart);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  });
+
   ShoppingRouter
   .route("/:id")
   .get(async (req, res, next) => {
@@ -57,6 +47,21 @@ ShoppingRouter
     next(error);
   }
   });
+
+
+  ShoppingRouter
+  .route("/")
+  .post(async (req, res, next) => {
+    //need to include userId and productId in the req.body
+  console.log("THIS IS THE REQUEST BODY", req.body)
+  try {
+    const addToCart = await ShoppingCart.create(req.body);
+    res.send(addToCart);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 
 export default ShoppingRouter;

@@ -26,10 +26,12 @@ productsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const products = await Product.findAll({ order:[['id','ASC']],
-      include: [{ model: Category, through: { attributes: [] }}, {model: Review , include: [{ model: User }] }  ]
-    
+        const products = await Product.findAll({ order:[['id','ASC']],
+        include: [{ model: Category, through: { attributes: [] }}, {model: Review , include: [{ model: User }] } ],
     });
+        
+      
+ 
       res.send(products);
     } catch (error) {
       console.log(error);
