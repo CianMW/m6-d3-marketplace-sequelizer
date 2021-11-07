@@ -24,29 +24,29 @@ ShoppingRouter
     }
   })
 
-  ShoppingRouter
-  .route("/:id")
-  .get(async (req, res, next) => {
-    const specificProduct = await ShoppingCart.findAll({
-      where: {
-        id:`${req.params.id}`
-      }
-    });
-    res.send(specificProduct)
-  })
-  .delete(async (req, res, next) => {
-    try{
-    const productRemoveFromCart = await ShoppingCart.destroy({
-      where: {
-        id:req.params.id
-      }
-    });
-    res.send({productRemoveFromCart})
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-  });
+  // ShoppingRouter
+  // .route("/:id")
+  // .get(async (req, res, next) => {
+  //   const specificProduct = await ShoppingCart.findAll({
+  //     where: {
+  //       id:`${req.params.id}`
+  //     }
+  //   });
+  //   res.send(specificProduct)
+  // })
+  // .delete(async (req, res, next) => {
+  //   try{
+  //   const productRemoveFromCart = await ShoppingCart.destroy({
+  //     where: {
+  //       id:req.params.id
+  //     }
+  //   });
+  //   res.send({productRemoveFromCart})
+  // } catch (error) {
+  //   console.log(error);
+  //   next(error);
+  // }
+  // });
 
 
   ShoppingRouter

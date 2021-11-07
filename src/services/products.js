@@ -1,9 +1,12 @@
 import express from "express";
 import models from "../db/models/index.js"
 import multer from "multer";
+import s from "sequelize"
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from 'dotenv/config';
+import sequelize from "../db/index.js";
+const { Op } = s;
 const { Product, Review, User, Category, ProductJoinCategory } = models;
 
 const productsRouter = express.Router();
@@ -24,20 +27,20 @@ const cloudinaryStorage = new CloudinaryStorage({
 
 productsRouter
   .route("/")
-  .get(async (req, res, next) => {
-    try {
-        const products = await Product.findAll({ order:[['id','ASC']],
-        include: [{ model: Category, through: { attributes: [] }}, {model: Review , include: [{ model: User }] } ],
-    });
+  // .get(async (req, res, next) => {
+  //   try {
+  //       const products = await Product.findAll({ order:[['id','ASC']],
+  //       include: [{ model: Category, through: { attributes: [] }}, {model: Review , include: [{ model: User }] } ],
+  //   });
         
       
  
-      res.send(products);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  })
+  //     res.send(products);
+  //   } catch (error) {
+  //     console.log(error);
+  //     next(error);
+  //   }
+  // })
   .post(async (req, res, next) => {
     console.log("THIS IS THE REQUEST BODY", req.body)
     try {
@@ -49,16 +52,37 @@ productsRouter
       next(error);
     }
   });
+
+  // .get(async (req, res, next) => {
+  //   const specificProduct = await Product.findAll({
+  //     where: {
+  //       id:`${req.params.id}`
+  //     }
+  //   });
+  //   res.send(specificProduct)
+  // })  
   productsRouter
-  .route("/:id")
+  .route("/")
   .get(async (req, res, next) => {
-    const specificProduct = await Product.findAll({
-      where: {
-        id:`${req.params.id}`
-      }
-    });
-    res.send(specificProduct)
+    try {
+      const data = await Product.findAll({
+        where: req.body.name
+          ? { name: { [Op.iLike]: `%${req.body.name}%` } }
+          : {},
+        include: {
+          model: Category,
+          where: req.query.category ? { name: req.body.category } : {},
+        },
+      });
+      res.send(data);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   })
+
+
+
   .put(async (req, res, next) => {
     const updatedProduct = await Product.update({ ...req.body}, {
       where: {
