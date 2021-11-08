@@ -65,7 +65,7 @@ productsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await Product.findAll({req.query.offset
+      const data = await Product.findAll({ offset:req.body.offset, limit:req.body.offset*2,
         where: req.body.name
           ? { name: { [Op.iLike]: `%${req.body.name}%` } }
           : {},
