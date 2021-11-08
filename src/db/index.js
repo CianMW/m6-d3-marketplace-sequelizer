@@ -3,10 +3,17 @@ import { Sequelize } from "sequelize";
 const { PGDATABASE, PGUSER, PGPASSWORD, PGHOST, PGPORT } = process.env;
 //destructures the variables from env
 
-const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
-  host: PGHOST,
-  port: PGPORT,
+const sequelize = new Sequelize(
+  process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
+  host: process.env.PGHOST,
+  port: process.env.PGPORT,
   dialect: "postgres",
+  dialectOptions: {         // IMPORTANT
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
 console.log("sequelize instance created");
 //creates
